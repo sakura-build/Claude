@@ -1,0 +1,9 @@
+*.exe
+*.zip
+*.msi
+/tmp/
+.cache/
+node_modules/
+# 包含 API Key 的文件
+setup_codex.sh
+finish_codex_setup.sh

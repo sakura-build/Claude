@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TaskFlow</title>
+<style>
+:root {
+  --bg:#f6f6f6; --surface:#fff; --border:#eaeaea;
+  --text:#1a1a1a; --text2:#6b6b6b; --text3:#aaa;
+  --red:#e5484d; --redBg:#fef2f2; --redBd:#fecaca;
+  --amber:#f59e0b; --amberBg:#fffbeb; --amberBd:#fde68a;
+  --blue:#2563eb; --blueBg:#eff6ff; --blueBd:#bfdbfe;
+  --green:#16a34a; --greenBg:#f0fdf4; --greenBd:#bbf7d0;
+  --purple:#7c3aed; --purpleBg:#f5f3ff; --purpleBd:#ddd6fe;
+  --gray50:#fafafa; --gray100:#f5f5f5; --gray200:#e5e5e5;
+  --gray300:#d4d4d4; --gray400:#a3a3a3; --gray500:#737373;
+  --gray700:#404040; --gray900:#171717;
+  --r:12px; --r-sm:8px; --r-xs:5px;
+  --font:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans SC',sans-serif;
+  --shadow:0 1px 2px rgba(0,0,0,.04),0 0 0 1px rgba(0,0,0,.02);
+  --shadow-md:0 4px 12px rgba(0,0,0,.06),0 1px 2px rgba(0,0,0,.04);
+  --shadow-lg:0 12px 40px rgba(0,0,0,.12),0 4px 12px rgba(0,0,0,.06);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+  font-family:var(--font);background:var(--bg);color:var(--text);
+  min-height:100vh;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;
+  line-height:1.5;
+}
+.wrap{max-width:760px;margin:0 auto;padding:28px 20px 100px}
+
+/* ── Header ── */
+header{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px}
+.logo{display:flex;align-items:center;gap:10px}
+.logo .icon{width:32px;height:32px;border-radius:var(--r-xs);background:var(--gray900);color:#fff;display:flex;align-items:center;justify-content:center;font-size:1.1rem}
+.logo h1{font-size:1.25rem;font-weight:700;letter-spacing:-0.02em}
+.logo .badge{font-size:0.68rem;font-weight:500;color:var(--text2);background:var(--gray100);padding:2px 8px;border-radius:10px}
+
+/* ── Stats row ── */
+.stats{display:flex;gap:10px;margin-bottom:24px;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.stats::-webkit-scrollbar{display:none}
+.stat-card{
+  flex:1;min-width:90px;padding:14px 16px;background:var(--surface);
+  border-radius:var(--r);box-shadow:var(--shadow);cursor:pointer;
+  transition:all .2s;border:1.5px solid transparent;text-align:center;
+}
+.stat-card:hover{box-shadow:var(--shadow-md);transform:translateY(-1px)}
+.stat-card.active{border-color:var(--gray900);box-shadow:var(--shadow-md)}
+.stat-card .n{font-size:1.8rem;font-weight:800;letter-spacing:-0.03em;line-height:1}
+.stat-card .l{font-size:0.72rem;color:var(--text2);margin-top:4px;font-weight:500}
+.stat-card.red .n{color:var(--red)}.stat-card.amber .n{color:var(--amber)}
+.stat-card.purple .n{color:var(--purple)}.stat-card.green .n{color:var(--green)}
+
+/* ── Toolbar ── */
+.toolbar{display:flex;gap:8px;margin-bottom:16px;align-items:center;flex-wrap:wrap}
+.toolbar .search{
+  flex:1;min-width:180px;padding:8px 14px;border:1px solid var(--border);
+  border-radius:20px;font-size:0.82rem;outline:none;background:var(--surface);
+  transition:all .15s;font-family:var(--font);
+}
+.toolbar .search:focus{border-color:var(--gray300);box-shadow:0 0 0 3px rgba(0,0,0,0.03)}
+.toolbar select{
+  padding:8px 12px;border:1px solid var(--border);border-radius:20px;
+  font-size:0.78rem;outline:none;background:var(--surface);font-family:var(--font);
+  cursor:pointer;color:var(--text2);
+}
+.toolbar .icon-btn{
+  width:36px;height:36px;border-radius:50%;border:1px solid var(--border);
+  background:var(--surface);cursor:pointer;font-size:0.95rem;
+  display:flex;align-items:center;justify-content:center;transition:all .12s;color:var(--text2);
+}
+.toolbar .icon-btn:hover{background:var(--gray50);color:var(--text)}
+
+/* ── Create button ── */
+.create-btn{
+  width:100%;padding:14px 20px;background:var(--surface);border:1.5px dashed var(--gray300);
+  border-radius:var(--r);cursor:pointer;text-align:left;font-size:0.9rem;
+  color:var(--text3);transition:all .15s;margin-bottom:16px;font-family:var(--font);
+  display:flex;align-items:center;gap:8px;
+}
+.create-btn:hover{border-color:var(--gray400);color:var(--text2);background:var(--gray50)}
+.create-btn .plus{font-size:1.2rem;font-weight:400}
+
+/* ── Create panel (expandable) ── */
+.create-panel{
+  display:none;background:var(--surface);border-radius:var(--r);
+  box-shadow:var(--shadow-lg);padding:20px;margin-bottom:16px;
+  border:1px solid var(--border);animation:slideDown .2s ease;
+}
+@keyframes slideDown{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
+.create-panel.show{display:block}
+.create-panel input[type="text"]{
+  width:100%;padding:10px 0;border:none;border-bottom:2px solid var(--gray100);
+  font-size:1.05rem;font-weight:600;outline:none;margin-bottom:16px;font-family:var(--font);
+  transition:border .15s;
+}
+.create-panel input[type="text"]:focus{border-bottom-color:var(--gray900)}
+.create-panel .fields{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:500px){.create-panel .fields{grid-template-columns:1fr}}
+.create-panel label{display:block;font-size:0.72rem;font-weight:600;color:var(--text2);margin-bottom:3px;text-transform:uppercase;letter-spacing:0.04em}
+.create-panel input[type="date"],.create-panel input[type="time"],.create-panel select{
+  width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:var(--r-xs);
+  font-size:0.85rem;outline:none;font-family:var(--font);transition:border .12s;
+}
+.create-panel input:focus,.create-panel select:focus{border-color:var(--gray400)}
+.create-panel .tag-input-wrap{display:flex;gap:4px;flex-wrap:wrap;align-items:center;padding:6px 10px;border:1px solid var(--border);border-radius:var(--r-xs);min-height:36px}
+.create-panel .tag-input-wrap input{border:none;outline:none;font-size:0.85rem;flex:1;min-width:60px;font-family:var(--font);background:transparent}
+.create-panel .tag-input-wrap .tchip{
+  display:inline-flex;align-items:center;gap:3px;font-size:0.72rem;padding:2px 8px;
+  background:var(--blueBg);color:var(--blue);border-radius:10px
+}
+.create-panel .tchip .x{cursor:pointer;opacity:.5}
+.create-panel .tchip .x:hover{opacity:1}
+.create-panel .actions{display:flex;gap:8px;margin-top:16px;justify-content:flex-end}
+.create-panel .actions button{padding:9px 20px;border-radius:var(--r-xs);font-weight:600;font-size:0.82rem;cursor:pointer;border:none;transition:all .12s;font-family:var(--font)}
+.create-panel .btn-cancel{background:var(--gray100);color:var(--text2)}
+.create-panel .btn-cancel:hover{background:var(--gray200)}
+.create-panel .btn-create{background:var(--gray900);color:#fff}
+.create-panel .btn-create:hover{background:#000}
+
+/* ── Task cards ── */
+.task-group{margin-bottom:20px}
+.task-group-title{
+  font-size:0.72rem;font-weight:700;color:var(--text3);text-transform:uppercase;
+  letter-spacing:0.06em;padding:8px 0;display:flex;align-items:center;gap:8px;
+}
+.task-group-title::after{content:'';flex:1;height:1px;background:var(--border)}
+
+.card{
+  background:var(--surface);border-radius:var(--r);padding:16px;
+  margin-bottom:6px;transition:all .15s;border:1px solid transparent;
+  cursor:default;
+}
+.card:hover{border-color:var(--gray200);box-shadow:var(--shadow-md)}
+.card.selected{border-color:var(--gray900)}
+.card.done{opacity:.45}
+.card.done .title{text-decoration:line-through;color:var(--text3)}
+.card.overdue{border-left:3px solid var(--red);padding-left:13px}
+.card.due-today:not(.overdue){border-left:3px solid var(--amber);padding-left:13px}
+
+.card .top{display:flex;align-items:flex-start;gap:10px}
+.card .check{
+  width:22px;height:22px;min-width:22px;border-radius:50%;
+  border:2px solid var(--gray300);cursor:pointer;margin-top:1px;
+  transition:all .15s;display:flex;align-items:center;justify-content:center;
+}
+.card .check:hover{border-color:var(--green)}
+.card .check.on{background:var(--green);border-color:var(--green)}
+.card .check.on::after{content:'✓';color:#fff;font-size:0.75rem;font-weight:700}
+.card .body{flex:1;min-width:0}
+.card .title{font-size:0.9rem;font-weight:600;word-break:break-word}
+.card .title .pri{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:4px;vertical-align:middle}
+.card .title .pri.red{background:var(--red)}.card .title .pri.amber{background:var(--amber)}.card .title .pri.blue{background:var(--blue)}
+
+.card .meta{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-top:3px;font-size:0.72rem;color:var(--text2)}
+.card .meta .tag{display:inline-block;padding:1px 8px;border-radius:10px;font-size:0.67rem;font-weight:500}
+.card .meta .tag.t0{background:var(--blueBg);color:var(--blue)}
+.card .meta .tag.t1{background:var(--greenBg);color:var(--green)}
+.card .meta .tag.t2{background:var(--purpleBg);color:var(--purple)}
+.card .meta .tag.t3{background:var(--amberBg);color:var(--amber)}
+.card .meta .date.red{color:var(--red)}.card .meta .date.amber{color:var(--amber)}
+
+.card .progress{margin-top:8px;display:flex;align-items:center;gap:8px}
+.card .progress .bar{flex:1;height:4px;background:var(--gray100);border-radius:2px;overflow:hidden}
+.card .progress .bar .fill{height:100%;border-radius:2px;transition:width .4s ease}
+.card .progress .pct{font-size:0.72rem;font-weight:700;color:var(--purple);min-width:28px;text-align:right}
+
+/* Reports */
+.card .rpt{margin-top:8px}
+.card .rpt-toggle{
+  font-size:0.7rem;font-weight:600;color:var(--purple);cursor:pointer;
+  display:inline-flex;align-items:center;gap:3px;user-select:none;
+}
+.card .rpt-toggle:hover{opacity:.7}
+.card .rpt-body{display:none;margin-top:6px;position:relative;padding-left:14px}
+.card .rpt-body.show{display:block}
+.card .rpt-body::before{content:'';position:absolute;left:0;top:3px;bottom:3px;width:1.5px;background:var(--gray200)}
+.rpt-line{position:relative;padding:5px 0 5px 10px;font-size:0.76rem}
+.rpt-line::before{content:'';position:absolute;left:-16px;top:9px;width:6px;height:6px;border-radius:50%;background:var(--purple);border:2px solid #fff;z-index:1}
+.rpt-line .c{color:var(--gray700);white-space:pre-wrap}
+.rpt-line .m{display:flex;gap:6px;align-items:center;margin-top:1px;font-size:0.68rem;color:var(--text3)}
+.rpt-line .m .pct{font-weight:700;color:var(--purple)}
+.rpt-line .m .del{cursor:pointer;opacity:0;transition:opacity .1s}
+.rpt-line:hover .m .del{opacity:1}
+.rpt-line .m .del:hover{color:var(--red)}
+
+/* Add report */
+.add-rpt{display:none;margin-top:4px;margin-left:10px;padding:8px 10px;background:var(--gray50);border-radius:var(--r-xs)}
+.add-rpt.show{display:block}
+.add-rpt textarea{width:100%;border:1px solid var(--gray200);border-radius:4px;padding:6px 8px;font-size:0.78rem;font-family:var(--font);resize:vertical;min-height:32px;outline:none}
+.add-rpt textarea:focus{border-color:var(--purple)}
+.add-rpt .row{display:flex;gap:6px;align-items:center;margin-top:5px}
+.add-rpt input[type="range"]{width:60px;accent-color:var(--purple)}
+
+.btn{display:inline-flex;align-items:center;gap:4px;padding:6px 12px;border:none;border-radius:6px;font-size:0.74rem;font-weight:600;cursor:pointer;transition:all .1s;font-family:var(--font)}
+.btn-dark{background:var(--gray900);color:#fff}.btn-dark:hover{background:#000}
+.btn-purple{background:var(--purple);color:#fff}.btn-purple:hover{background:#6d28d9}
+.btn-ghost{background:transparent;color:var(--text2)}.btn-ghost:hover{background:var(--gray100)}
+
+.card-acts{display:flex;gap:1px;opacity:0;transition:opacity .1s;align-self:flex-start}
+.card:hover .card-acts{opacity:1}
+.card-acts button{border:none;background:none;cursor:pointer;padding:3px 5px;border-radius:4px;font-size:0.82rem;color:var(--text3);transition:all .08s}
+.card-acts button:hover{background:var(--gray100);color:var(--text)}
+.card-acts button.del:hover{color:var(--red);background:var(--redBg)}
+
+.empty-state{text-align:center;padding:60px 0;color:var(--text3)}
+.empty-state .emoji{font-size:3rem;margin-bottom:8px;opacity:.5}
+.empty-state p{font-size:0.88rem}
+
+.toast{
+  position:fixed;top:20px;left:50%;transform:translateX(-50%);z-index:200;
+  background:var(--amberBg);color:#92400e;border:1px solid var(--amberBd);
+  border-radius:20px;padding:8px 20px;font-size:0.8rem;font-weight:500;
+  display:none;box-shadow:var(--shadow-md)
+}
+.toast.show{display:block}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="logo">
+      <div class="icon">✓</div>
+      <h1>TaskFlow</h1>
+      <span class="badge" id="dateBadge"></span>
+    </div>
+  </header>
+
+  <div class="toast" id="toast">⏰ <span id="toastText"></span></div>
+
+  <!-- Stats -->
+  <div class="stats" id="stats">
+    <div class="stat-card active" data-filter="all"><div class="n" id="snAll">0</div><div class="l">全部任务</div></div>
+    <div class="stat-card amber" data-filter="incomplete"><div class="n" id="snInc">0</div><div class="l">待处理</div></div>
+    <div class="stat-card purple" data-filter="inprogress"><div class="n" id="snProg">0</div><div class="l">进行中</div></div>
+    <div class="stat-card green" data-filter="done"><div class="n" id="snDone">0</div><div class="l">已完成</div></div>
+    <div class="stat-card red" data-filter="overdue"><div class="n" id="snOver">0</div><div class="l">已逾期</div></div>
+  </div>
+
+  <!-- Toolbar -->
+  <div class="toolbar">
+    <input class="search" id="searchBox" placeholder="🔍 搜索任务或汇报内容...">
+    <select id="filterTag"><option value="all">全部标签</option></select>
+    <button class="icon-btn" id="btnExport" title="导出备份">↓</button>
+    <button class="icon-btn" id="btnImport" title="导入恢复">↑</button>
+  </div>
+
+  <!-- Create button -->
+  <button class="create-btn" id="btnShowCreate">
+    <span class="plus">+</span> 创建新任务
+  </button>
+
+  <!-- Create panel -->
+  <div class="create-panel" id="createPanel">
+    <input type="text" id="newTitle" placeholder="任务标题" maxlength="200">
+    <div class="fields">
+      <div>
+        <label>优先级</label>
+        <select id="newPriority">
+          <option value="high">🔴 高优先级</option>
+          <option value="medium" selected>🟡 中优先级</option>
+          <option value="low">🔵 低优先级</option>
+        </select>
+      </div>
+      <div>
+        <label>标签</label>
+        <div class="tag-input-wrap" id="newTagWrap">
+          <span id="newTagChips"></span>
+          <input type="text" id="newTagInput" placeholder="输入后回车...">
+        </div>
+      </div>
+      <div>
+        <label>开始日期</label>
+        <input type="date" id="newStartDate">
+      </div>
+      <div>
+        <label>截止日期</label>
+        <input type="date" id="newDueDate">
+      </div>
+    </div>
+    <div class="actions">
+      <button class="btn-cancel" id="btnCancelCreate">取消</button>
+      <button class="btn-create" id="btnCreate">创建任务</button>
+    </div>
+  </div>
+
+  <!-- Task list -->
+  <div id="taskList"></div>
+
+</div>
+
+<script>
+const KEY='tf_v1';
+let newTags=[];
+let curFilter='all';
+
+function ld(){try{return JSON.parse(localStorage.getItem(KEY))||[]}catch{return[]}}
+function sv(d){localStorage.setItem(KEY,JSON.stringify(d))}
+const T=()=>new Date();
+const today=()=>T().toISOString().slice(0,10);
+const t16=()=>T().toISOString().slice(0,16);
+function ago(iso){const d=new Date(iso),df=T()-d;if(df<6e4)return'刚刚';if(df<36e5)return Math.floor(df/6e4)+'m';if(df<864e5)return Math.floor(df/36e5)+'h';if(df<1728e5)return'昨天';const dd=Math.floor(df/864e5);if(dd<7)return dd+'天';return d.toLocaleDateString('zh-CN')}
+function sdt(d,t){return d?(t?d.slice(5)+' '+t:d.slice(5)):''}
+function ov(t){if(t.completed||!t.dueDate)return false;return t16()>=(t.dueDate+(t.dueTime?'T'+t.dueTime:'T23:59'))}
+function dt(t){return!t.completed&&t.dueDate&&t.dueDate===today()}
+function gp(t){const r=t.reports||[];return r.length?r[r.length-1].progress:(t.progress||0)}
+function pc(v){if(v===0)return'c0';if(v<=25)return'c1';if(v<=50)return'c2';if(v<=75)return'c3';if(v<100)return'c4';return'c5'}
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+const TC=['t0','t1','t2','t3'];
+function tcls(tag){let h=0;for(let i=0;i<tag.length;i++)h=((h<<5)-h)+tag.charCodeAt(i);return TC[Math.abs(h)%TC.length]}
+
+// ── Render ──
+function render(){
+  const tasks=ld();const q=document.getElementById('searchBox').value.toLowerCase().trim();const ft=document.getElementById('filterTag').value;
+  let f=tasks;
+  if(q)f=f.filter(t=>{if(t.title.toLowerCase().includes(q))return true;if((t.tags||[]).some(tg=>tg.toLowerCase().includes(q)))return true;return(t.reports||[]).some(r=>r.content.toLowerCase().includes(q))});
+  if(ft!=='all')f=f.filter(t=>(t.tags||[]).includes(ft));
+  if(curFilter==='incomplete')f=f.filter(t=>!t.completed);
+  if(curFilter==='inprogress')f=f.filter(t=>!t.completed&&gp(t)>0&&gp(t)<100);
+  if(curFilter==='done')f=f.filter(t=>t.completed);
+  if(curFilter==='overdue')f=f.filter(t=>!t.completed&&ov(t));
+  const inc=f.filter(t=>!t.completed),com=f.filter(t=>t.completed);
+  inc.sort((a,b)=>{const ao=ov(a)?0:1,bo=ov(b)?0:1;if(ao!==bo)return ao-bo;if(a.dueDate&&b.dueDate)return a.dueDate.localeCompare(b.dueDate);if(a.dueDate)return-1;if(b.dueDate)return 1;const p={high:0,medium:1,low:2};return(p[a.priority]||1)-(p[b.priority]||1)});
+  com.sort((a,b)=>(b.completedAt||'').localeCompare(a.completedAt||''));
+
+  const list=document.getElementById('taskList');
+  if(!inc.length&&!com.length){list.innerHTML='<div class="empty-state"><div class="emoji">☕</div><p>没有任务，创建第一个吧</p></div>'}
+  else{let h='';if(inc.length){h+=`<div class="task-group"><div class="task-group-title">待处理 · ${inc.length}</div>`+inc.map(card).join('')+'</div>'}if(com.length){h+=`<div class="task-group"><div class="task-group-title">已完成 · ${com.length}</div>`+com.map(card).join('')+'</div>'}list.innerHTML=h}
+
+  document.getElementById('dateBadge').textContent=T().toLocaleDateString('zh-CN',{month:'long',day:'numeric',weekday:'short'});
+  document.getElementById('snAll').textContent=tasks.length;
+  document.getElementById('snInc').textContent=tasks.filter(t=>!t.completed).length;
+  document.getElementById('snProg').textContent=tasks.filter(t=>!t.completed&&gp(t)>0&&gp(t)<100).length;
+  document.getElementById('snDone').textContent=tasks.filter(t=>t.completed).length;
+  document.getElementById('snOver').textContent=tasks.filter(t=>!t.completed&&ov(t)).length;
+
+  const ovc=tasks.filter(t=>!t.completed&&ov(t));const dtc=tasks.filter(t=>!t.completed&&dt(t)&&!ov(t));
+  const toast=document.getElementById('toast'),tt=document.getElementById('toastText');
+  if(ovc.length||dtc.length){let m=[];if(ovc.length)m.push(`<b>${ovc.length}</b> 项逾期`);if(dtc.length)m.push(`<b>${dtc.length}</b> 项今日截止`);tt.innerHTML=m.join(' · ');toast.classList.add('show')}else toast.classList.remove('show');
+  updateTagFilter(tasks);
+}
+
+function card(t){
+  const o=ov(t),d=dt(t),prog=gp(t),rpts=t.reports||[],done=t.completed;
+  let cls='card';if(done)cls+=' done';else if(o)cls+=' overdue';else if(d)cls+=' due-today';
+  const pdot={high:'<span class="pri red"></span>',medium:'<span class="pri amber"></span>',low:'<span class="pri blue"></span>'};
+  let dateH='';if(t.startDate||t.dueDate){const dc=o?'red':(d?'amber':'');if(t.startDate&&t.dueDate)dateH=`<span class="date ${dc}">📅 ${sdt(t.startDate,t.startTime)} → ${sdt(t.dueDate,t.dueTime)}</span>`;else if(t.dueDate)dateH=`<span class="date ${dc}">⏰ ${sdt(t.dueDate,t.dueTime)}</span>`;else dateH=`<span class="date">📅 ${sdt(t.startDate,t.startTime)}</span>`}
+  let tagsH='';if(t.tags&&t.tags.length)tagsH=t.tags.map(tg=>`<span class="tag ${tcls(tg)}">${esc(tg)}</span>`).join('');
+  let progH='';if(!done){progH=`<div class="progress"><div class="bar"><div class="fill" style="width:${prog}%;background:${prog===0?'var(--gray200)':prog<=25?'var(--red)':prog<=50?'var(--amber)':prog<=75?'var(--blue)':prog<100?'var(--purple)':'var(--green)'}"></div></div><span class="pct">${prog}%</span></div>`}
+  let rptH='';if(!done){rptH=`
+    <div class="rpt"><span class="rpt-toggle" onclick="tr('${t.id}')">📋 ${rpts.length} 条汇报</span>
+    <div class="rpt-body" id="rb-${t.id}">${rpts.map(r=>`
+      <div class="rpt-line"><div class="c">${esc(r.content)}</div><div class="m"><span class="pct">${r.progress}%</span><span>${ago(r.createdAt)}</span><span class="del" onclick="event.stopPropagation();dr('${t.id}','${r.id}')">✕</span></div></div>
+    `).join('')}
+    <div class="add-rpt" id="ar-${t.id}"><textarea id="rt-${t.id}" placeholder="汇报工作进展..." rows="2"></textarea><div class="row"><span style="font-size:0.72rem;color:var(--text2)">进度</span><input type="range" id="rp-${t.id}" min="0" max="100" value="${prog}" step="5" oninput="document.getElementById('rpp-${t.id}').textContent=this.value+'%'"><span style="font-size:0.72rem;font-weight:700;color:var(--purple)" id="rpp-${t.id}">${prog}%</span><button class="btn btn-purple btn-xs" onclick="ar('${t.id}')">提交</button><button class="btn btn-ghost btn-xs" onclick="tar('${t.id}')">取消</button></div></div>
+    <button class="btn btn-ghost btn-xs" id="bar-${t.id}" onclick="tar('${t.id}')" style="margin-top:4px">＋ 添加汇报</button>
+    </div></div>`}else if(rpts.length){rptH=`<div style="font-size:0.7rem;color:var(--text3);margin-top:4px">📋 ${rpts.length} 条汇报</div>`}
+
+  return `<div class="${cls}" data-id="${t.id}"><div class="top"><div class="check ${done?'on':''}" onclick="td('${t.id}')"></div><div class="body"><div class="title">${pdot[t.priority]}${esc(t.title)}</div>${progH}<div class="meta">${tagsH}${dateH}</div>${rptH}</div><div class="card-acts"><button onclick="ed('${t.id}')" title="编辑">✏️</button><button class="del" onclick="dl('${t.id}')" title="删除">🗑</button></div></div></div>`;
+}
+
+// ── Actions ──
+function create(){
+  const title=document.getElementById('newTitle').value.trim();if(!title)return;
+  const tasks=ld();
+  tasks.push({id:crypto.randomUUID(),title,priority:document.getElementById('newPriority').value,tags:[...newTags],startDate:document.getElementById('newStartDate').value,startTime:'',dueDate:document.getElementById('newDueDate').value,dueTime:'',progress:0,reports:[],completed:false,createdAt:T().toISOString(),completedAt:null});
+  sv(tasks);
+  // Reset
+  document.getElementById('newTitle').value='';document.getElementById('newStartDate').value='';document.getElementById('newDueDate').value='';newTags=[];rTC();
+  document.getElementById('createPanel').classList.remove('show');document.getElementById('btnShowCreate').style.display='';
+  render();
+}
+function td(id){const ts=ld();const t=ts.find(x=>x.id===id);if(!t)return;t.completed=!t.completed;t.completedAt=t.completed?T().toISOString():null;if(t.completed)t.progress=100;sv(ts);render()}
+function dl(id){if(!confirm('删除此任务？'))return;sv(ld().filter(t=>t.id!==id));render()}
+function ed(id){const ts=ld();const t=ts.find(x=>x.id===id);if(!t)return;const nt=prompt('任务标题',t.title);if(nt===null)return;const nv=nt.trim();if(!nv)return;t.title=nv;const nd=prompt('截止日期 (YYYY-MM-DD)',t.dueDate||'');if(nd!==null)t.dueDate=nd.trim()||'';const ns=prompt('开始日期 (YYYY-MM-DD)',t.startDate||'');if(ns!==null)t.startDate=ns.trim()||'';sv(ts);render()}
+
+// Reports
+function tr(id){document.getElementById('rb-'+id).classList.toggle('show')}
+function tar(id){const el=document.getElementById('ar-'+id),btn=document.getElementById('bar-'+id);const s=!el.classList.contains('show');el.classList.toggle('show');if(btn)btn.style.display=s?'none':'';if(s)setTimeout(()=>{const ta=document.getElementById('rt-'+id);if(ta)ta.focus()},50)}
+function ar(id){const ts=ld();const t=ts.find(x=>x.id===id);if(!t)return;const c=document.getElementById('rt-'+id).value.trim();if(!c)return;const p=parseInt(document.getElementById('rp-'+id).value)||0;if(!t.reports)t.reports=[];t.reports.push({id:crypto.randomUUID(),content:c,progress:p,createdAt:T().toISOString()});t.progress=p;sv(ts);render()}
+function dr(tid,rid){const ts=ld();const t=ts.find(x=>x.id===tid);if(!t)return;t.reports=(t.reports||[]).filter(r=>r.id!==rid);t.progress=t.reports.length?t.reports[t.reports.length-1].progress:0;sv(ts);render()}
+
+// Tags in create panel
+function rTC(){document.getElementById('newTagChips').innerHTML=newTags.map(tg=>`<span class="tchip">${esc(tg)}<span class="x" data-tag="${esc(tg)}">×</span></span>`).join('')}
+
+// Export/Import
+function exp(){const b=new Blob([JSON.stringify(ld(),null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='taskflow_'+today()+'.json';a.click();URL.revokeObjectURL(a.href)}
+function imp(){const i=document.createElement('input');i.type='file';i.accept='.json';i.onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=ev=>{try{const d=JSON.parse(ev.target.result);if(!Array.isArray(d))throw Error('格式错误');d.forEach(t=>{if(!t.reports)t.reports=[];if(!t.tags)t.tags=[]});sv(d);render()}catch(err){alert('导入失败：'+err.message)}};r.readAsText(f)};i.click()}
+
+function updateTagFilter(ts){const all=new Set();ts.forEach(t=>(t.tags||[]).forEach(tg=>all.add(tg)));const sel=document.getElementById('filterTag'),cur=sel.value;sel.innerHTML='<option value="all">全部标签</option>';[...all].sort().forEach(t=>{sel.innerHTML+=`<option value="${esc(t)}">${esc(t)}</option>`});if([...all].includes(cur))sel.value=cur}
+
+// ── Init ──
+function init(){
+  document.getElementById('btnShowCreate').addEventListener('click',()=>{const p=document.getElementById('createPanel');p.classList.add('show');document.getElementById('btnShowCreate').style.display='none';document.getElementById('newTitle').focus()});
+  document.getElementById('btnCancelCreate').addEventListener('click',()=>{document.getElementById('createPanel').classList.remove('show');document.getElementById('btnShowCreate').style.display=''});
+  document.getElementById('btnCreate').addEventListener('click',create);
+  document.getElementById('newTitle').addEventListener('keydown',e=>{if(e.key==='Enter')create()});
+  document.getElementById('newTagInput').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();const v=e.target.value.trim();if(v&&!newTags.includes(v)){newTags.push(v);rTC()}e.target.value=''}});
+  document.getElementById('newTagChips').addEventListener('click',e=>{if(e.target.classList.contains('x')){newTags=newTags.filter(t=>t!==e.target.dataset.tag);rTC()}});
+
+  document.querySelectorAll('.stat-card').forEach(c=>{c.addEventListener('click',()=>{curFilter=c.dataset.filter;document.querySelectorAll('.stat-card').forEach(x=>x.classList.remove('active'));c.classList.add('active');render()})});
+  document.getElementById('searchBox').addEventListener('input',render);
+  document.getElementById('filterTag').addEventListener('change',render);
+  document.getElementById('btnExport').addEventListener('click',exp);
+  document.getElementById('btnImport').addEventListener('click',imp);
+  document.addEventListener('keydown',e=>{if(e.target.tagName==='INPUT'||e.target.tagName==='TEXTAREA'||e.target.isContentEditable)return;if(e.key==='n'||e.key==='N'){e.preventDefault();const p=document.getElementById('createPanel');p.classList.add('show');document.getElementById('btnShowCreate').style.display='none';document.getElementById('newTitle').focus()}});
+  render();
+}
+init();
+</script>
+</body>
+</html>
