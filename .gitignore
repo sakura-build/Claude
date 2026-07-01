@@ -1,9 +1,32 @@
-*.exe
-*.zip
-*.msi
-/tmp/
-.cache/
+# Dependencies
 node_modules/
-# 包含 API Key 的文件
-setup_codex.sh
-finish_codex_setup.sh
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# IDE
+.vscode/
+.idea/
+.agents/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs
+*.log
+npm-debug.log*
+
+# Build
+dist/
+build/
+
+# Cache
+.cache/
+*.tsbuildinfo
