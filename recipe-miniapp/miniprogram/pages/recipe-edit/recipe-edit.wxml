@@ -1,0 +1,151 @@
+<!-- 菜谱编辑页 -->
+<view class="page-container">
+  <view class="form-section card">
+    <!-- 封面 -->
+    <view class="cover-upload" bindtap="onChooseCover">
+      <image
+        wx:if="{{form.coverImage}}"
+        class="cover-preview"
+        src="{{form.coverImage}}"
+        mode="aspectFill"
+      />
+      <view wx:else class="cover-placeholder">
+        <text class="cover-icon">📷</text>
+        <text class="cover-text">添加封面图</text>
+      </view>
+    </view>
+
+    <!-- 菜名 -->
+    <view class="form-item">
+      <text class="form-label required">菜名</text>
+      <input
+        class="form-input"
+        placeholder="例：西红柿炒鸡蛋"
+        value="{{form.name}}"
+        bindinput="onNameInput"
+        maxlength="40"
+      />
+    </view>
+
+    <!-- 分类 -->
+    <view class="form-item">
+      <text class="form-label">分类</text>
+      <picker
+        mode="selector"
+        range="{{categoryList}}"
+        value="{{categoryIndex}}"
+        bindchange="onCategoryChange"
+      >
+        <view class="picker-value">{{form.category}}</view>
+      </picker>
+    </view>
+
+    <!-- 简介 -->
+    <view class="form-item">
+      <text class="form-label">简介</text>
+      <textarea
+        class="form-textarea"
+        placeholder="简单描述一下这道菜..."
+        value="{{form.description}}"
+        bindinput="onDescInput"
+        maxlength="100"
+      />
+    </view>
+
+    <!-- 烹饪时长 -->
+    <view class="form-item">
+      <text class="form-label">烹饪时长（分钟）</text>
+      <view class="flex-row">
+        <slider
+          class="flex-1"
+          min="5"
+          max="180"
+          step="5"
+          value="{{form.cookingTime}}"
+          show-value
+          activeColor="#FF6B35"
+          bindchange="onCookingTimeChange"
+        />
+        <text class="time-value">{{form.cookingTime}}分钟</text>
+      </view>
+    </view>
+
+    <!-- 难度 -->
+    <view class="form-item">
+      <text class="form-label">难度</text>
+      <view class="flex-row">
+        <view
+          class="diff-option {{form.difficulty === item.value ? 'active' : ''}}"
+          wx:for="{{difficulties}}"
+          wx:key="value"
+          wx:for-item="item"
+          data-value="{{item.value}}"
+          bindtap="onDifficultyTap"
+        >
+          {{item.label}}
+        </view>
+      </view>
+    </view>
+
+    <!-- 几人份 -->
+    <view class="form-item">
+      <text class="form-label">几人份</text>
+      <view class="flex-row">
+        <view class="stepper-btn" bindtap="decreaseServings">−</view>
+        <text class="stepper-value">{{form.servings}}</text>
+        <view class="stepper-btn" bindtap="increaseServings">+</view>
+      </view>
+    </view>
+
+    <!-- 标签 -->
+    <view class="form-item">
+      <text class="form-label">标签</text>
+      <view class="flex-row flex-wrap mb-10" wx:if="{{form.tags.length > 0}}">
+        <view class="tag-input-tag"
+          wx:for="{{form.tags}}"
+          wx:key="*this"
+          wx:for-index="index"
+        >
+          <text>{{item}}</text>
+          <text class="tag-remove" data-index="{{index}}" bindtap="removeTag">✕</text>
+        </view>
+      </view>
+      <view class="flex-row">
+        <input
+          class="form-input flex-1"
+          placeholder="添加标签（如：快手菜、下饭）"
+          value="{{tagInput}}"
+          bindinput="onTagInput"
+          bindconfirm="addTag"
+          maxlength="10"
+        />
+        <button class="btn btn-primary btn-sm ml-10" bindtap="addTag">添加</button>
+      </view>
+    </view>
+  </view>
+
+  <!-- 食材编辑组件 -->
+  <view class="section-title">🥬 食材清单</view>
+  <ingredient-editor
+    ingredients="{{form.ingredients}}"
+    units="{{units}}"
+    bind:change="onIngredientsChange"
+  />
+
+  <!-- 步骤编辑组件 -->
+  <view class="section-title">👨‍🍳 烹饪步骤</view>
+  <step-editor
+    steps="{{form.steps}}"
+    bind:change="onStepsChange"
+  />
+
+  <!-- 保存按钮 -->
+  <view class="save-area">
+    <button
+      class="btn btn-primary btn-block"
+      bindtap="onSave"
+      disabled="{{saving}}"
+      loading="{{saving}}"
+    >{{saving ? '保存中...' : '保存菜谱'}}</button>
+  </view>
+</view>

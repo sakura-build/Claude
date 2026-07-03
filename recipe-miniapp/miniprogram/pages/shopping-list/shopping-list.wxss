@@ -1,0 +1,46 @@
+/* 采购清单样式 */
+.page-container { padding-bottom: 140rpx; }
+
+.date-bar { margin: 20rpx; }
+
+.date-text { font-size: 32rpx; font-weight: bold; }
+.arrow { font-size: 24rpx; margin-left: 10rpx; color: var(--text-hint); }
+.order-count { margin-right: 20rpx; }
+
+/* 食材项 */
+.list-section { padding: 0 20rpx; }
+
+.shop-item {
+  margin: 0 0 12rpx;
+  padding: 24rpx;
+  transition: all 0.2s;
+}
+
+.shop-item.checked { opacity: 0.6; }
+
+.check-box {
+  width: 44rpx; height: 44rpx; line-height: 44rpx; text-align: center;
+  border: 3rpx solid var(--border-color); border-radius: 50%;
+  margin-right: 20rpx; flex-shrink: 0;
+  font-size: 24rpx; color: #fff;
+  transition: all 0.2s;
+}
+
+.check-box.active {
+  background: var(--primary);
+  border-color: var(--primary);
+}
+
+.ing-name { font-size: 30rpx; }
+.ing-name.done { text-decoration: line-through; color: var(--text-hint); }
+.ing-qty { font-size: 28rpx; font-weight: bold; color: var(--primary); }
+.ing-source { margin-top: 6rpx; }
+
+/* 底部栏 */
+.bottom-bar {
+  position: fixed; bottom: 0; left: 0; right: 0;
+  background: #fff; padding: 20rpx 30rpx;
+  box-shadow: 0 -2rpx 12rpx rgba(0,0,0,0.06);
+  padding-bottom: calc(20rpx + constant(safe-area-inset-bottom));
+  padding-bottom: calc(20rpx + env(safe-area-inset-bottom));
+}

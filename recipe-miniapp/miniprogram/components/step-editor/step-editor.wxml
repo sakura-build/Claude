@@ -1,0 +1,54 @@
+<!-- 步骤编辑组件 -->
+<view class="step-editor">
+  <view class="step-block" wx:for="{{steps}}" wx:key="stepNum">
+    <view class="step-header flex-between">
+      <text class="step-num">步骤 {{item.stepNum}}</text>
+      <text class="step-del" wx:if="{{steps.length > 1}}" data-index="{{index}}" bindtap="removeStep">删除</text>
+    </view>
+
+    <!-- 步骤描述 -->
+    <textarea
+      class="step-textarea"
+      placeholder="描述这一步的做法..."
+      value="{{item.description}}"
+      data-index="{{index}}"
+      bindinput="onDescChange"
+      maxlength="200"
+    />
+
+    <!-- 计时器（可选）-->
+    <view class="step-extra flex-row">
+      <text class="extra-label">⏲ 计时（分钟，可选）</text>
+      <input
+        class="timer-input"
+        type="number"
+        placeholder="0"
+        value="{{item.timer}}"
+        data-index="{{index}}"
+        bindinput="onTimerChange"
+      />
+    </view>
+
+    <!-- 步骤图 -->
+    <view class="step-image-area">
+      <image
+        wx:if="{{item.image}}"
+        class="step-img"
+        src="{{item.image}}"
+        mode="aspectFill"
+        data-index="{{index}}"
+        bindtap="onChooseImage"
+      />
+      <view class="step-img-upload" wx:if="{{!item.image}}" data-index="{{index}}" bindtap="onChooseImage">
+        <text class="upload-icon">📷</text>
+        <text class="upload-text">添加步骤图</text>
+      </view>
+      <text class="img-remove" wx:if="{{item.image}}" data-index="{{index}}" bindtap="removeImage">移除图片</text>
+    </view>
+  </view>
+
+  <view class="step-add flex-center" bindtap="addStep">
+    <text class="add-icon">+</text>
+    <text class="add-text">添加步骤</text>
+  </view>
+</view>

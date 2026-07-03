@@ -1,0 +1,42 @@
+<!-- 食材编辑组件 -->
+<view class="ing-editor">
+  <view class="ing-row" wx:for="{{ingredients}}" wx:key="index">
+    <view class="ing-field name-field">
+      <input
+        class="field-input"
+        placeholder="食材名"
+        value="{{item.name}}"
+        data-index="{{index}}"
+        bindinput="onNameChange"
+        maxlength="20"
+      />
+    </view>
+    <view class="ing-field qty-field">
+      <input
+        class="field-input"
+        type="digit"
+        placeholder="数量"
+        value="{{item.quantity}}"
+        data-index="{{index}}"
+        bindinput="onQuantityChange"
+      />
+    </view>
+    <view class="ing-field unit-field">
+      <picker
+        mode="selector"
+        range="{{units}}"
+        data-index="{{index}}"
+        bindchange="onUnitChange"
+      >
+        <view class="picker-display">{{item.unit || '单位'}}</view>
+      </picker>
+    </view>
+    <view class="ing-del" data-index="{{index}}" bindtap="removeIngredient">
+      <text wx:if="{{ingredients.length > 1}}">✕</text>
+    </view>
+  </view>
+  <view class="ing-add flex-center" bindtap="addIngredient">
+    <text class="add-icon">+</text>
+    <text class="add-text">添加食材</text>
+  </view>
+</view>

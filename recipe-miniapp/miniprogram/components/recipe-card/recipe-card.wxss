@@ -1,0 +1,42 @@
+.recipe-card {
+  margin: 0 0 12rpx;
+  padding: 20rpx;
+}
+
+.card-row {
+  gap: 16rpx;
+}
+
+.card-cover {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: var(--radius-sm);
+  background: var(--bg-primary);
+  flex-shrink: 0;
+}
+
+.card-title {
+  font-size: 30rpx;
+  font-weight: bold;
+  max-width: 360rpx;
+}
+
+.card-meta {
+  gap: 8rpx;
+  flex-wrap: wrap;
+}
+
+.meta-tag {
+  padding: 2rpx 10rpx;
+  font-size: 20rpx;
+}
+
+.meta-item {
+  font-size: 22rpx;
+}
+
+.card-arrow {
+  font-size: 36rpx;
+  color: var(--text-hint);
+  flex-shrink: 0;
+}

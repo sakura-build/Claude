@@ -1,0 +1,119 @@
+/* 订单列表样式 */
+.page-container {
+  padding-bottom: 40rpx;
+}
+
+/* 日期筛选 */
+.date-filter {
+  padding: 16rpx 20rpx;
+}
+
+.date-picker-btn {
+  display: flex;
+  align-items: center;
+  padding: 12rpx 24rpx;
+  background: var(--bg-white);
+  border-radius: 30rpx;
+  font-size: 26rpx;
+  box-shadow: var(--shadow);
+}
+
+.date-picker-btn .arrow {
+  font-size: 20rpx;
+  margin-left: 10rpx;
+  color: var(--text-hint);
+}
+
+.clear-date {
+  margin-left: 12rpx;
+  width: 40rpx;
+  height: 40rpx;
+  line-height: 40rpx;
+  text-align: center;
+  background: var(--bg-white);
+  border-radius: 50%;
+  font-size: 22rpx;
+  color: var(--danger);
+}
+
+/* 状态筛选 */
+.status-tabs {
+  display: flex;
+  padding: 0 20rpx 20rpx;
+  white-space: nowrap;
+}
+
+.status-tab {
+  display: inline-block;
+  padding: 10rpx 24rpx;
+  border-radius: 30rpx;
+  font-size: 24rpx;
+  margin-right: 14rpx;
+  background: var(--bg-white);
+  color: var(--text-secondary);
+  flex-shrink: 0;
+}
+
+.status-tab.active {
+  background: var(--primary);
+  color: #fff;
+}
+
+/* 订单卡片 */
+.order-card {
+  margin: 0 20rpx 12rpx;
+}
+
+.order-main {
+  margin-bottom: 0;
+}
+
+.order-cover {
+  width: 100rpx;
+  height: 100rpx;
+  border-radius: var(--radius-sm);
+  margin-right: 16rpx;
+  background: var(--bg-primary);
+  flex-shrink: 0;
+}
+
+.order-name {
+  font-size: 30rpx;
+  font-weight: bold;
+  max-width: 300rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.order-qty {
+  font-size: 24rpx;
+  color: var(--text-hint);
+  margin-left: 8rpx;
+}
+
+.order-info {
+  margin-top: 4rpx;
+}
+
+.order-note {
+  margin-top: 4rpx;
+}
+
+.order-status-badge {
+  padding: 6rpx 16rpx;
+  border-radius: 20rpx;
+  font-size: 24rpx;
+  font-weight: bold;
+  flex-shrink: 0;
+  margin-left: 12rpx;
+}
+
+/* 操作区 */
+.order-actions {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 16rpx;
+  border-top: 1rpx solid var(--border-color);
+  margin-top: 16rpx;
+}

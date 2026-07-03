@@ -1,0 +1,19 @@
+<!-- 菜谱卡片组件 -->
+<view class="recipe-card card" bindtap="onTap">
+  <view class="card-row flex-row">
+    <image
+      class="card-cover"
+      src="{{recipe.coverImage}}"
+      mode="aspectFill"
+    />
+    <view class="card-body flex-1">
+      <text class="card-title text-ellipsis">{{recipe.name}}</text>
+      <view class="card-meta flex-row text-sm text-hint mt-10">
+        <text class="meta-tag tag-primary">{{recipe.category}}</text>
+        <text class="meta-item">⏱ {{recipe.cookingTime}}分钟</text>
+        <text class="meta-item">{{difficultyLabel}}</text>
+      </view>
+    </view>
+    <text class="card-arrow">›</text>
+  </view>
+</view>

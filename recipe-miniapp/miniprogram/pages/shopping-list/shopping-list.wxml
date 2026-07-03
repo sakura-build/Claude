@@ -1,0 +1,63 @@
+<!-- 采购清单 -->
+<view class="page-container">
+  <!-- 日期选择 -->
+  <view class="date-bar card flex-between">
+    <picker mode="date" value="{{date}}" bindchange="onDateChange">
+      <view class="flex-row">
+        <text class="date-text">{{dateDisplay}}</text>
+        <text class="arrow">▼</text>
+      </view>
+    </picker>
+    <view class="flex-row">
+      <text class="order-count text-sm text-hint" wx:if="{{orderCount > 0}}">{{orderCount}}道菜</text>
+      <text class="toggle-all text-sm text-primary" bindtap="toggleAll" wx:if="{{list.length > 0}}">
+        {{allChecked ? '取消全选' : '全选'}}
+      </text>
+    </view>
+  </view>
+
+  <!-- 食材列表 -->
+  <view class="list-section" wx:if="{{list.length > 0}}">
+    <view
+      class="shop-item card flex-row {{checkedItems[item.name + '_' + item.unit] ? 'checked' : ''}}"
+      wx:for="{{list}}"
+      wx:key="name"
+      wx:for-item="item"
+      data-key="{{item.name + '_' + item.unit}}"
+      bindtap="toggleCheck"
+    >
+      <view class="check-box {{checkedItems[item.name + '_' + item.unit] ? 'active' : ''}}">
+        <text wx:if="{{checkedItems[item.name + '_' + item.unit]}}">✓</text>
+      </view>
+      <view class="flex-1">
+        <view class="flex-between">
+          <text class="ing-name {{checkedItems[item.name + '_' + item.unit] ? 'done' : ''}}">{{item.name}}</text>
+          <text class="ing-qty">{{item.totalQuantity}} {{item.unit}}</text>
+        </view>
+        <text class="ing-source text-sm text-hint">来自：{{item.sourceRecipes.join('、')}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 空状态 -->
+  <view class="empty-state" wx:if="{{!loading && list.length === 0}}">
+    <text class="empty-icon">🛒</text>
+    <text class="empty-text">这天没有点餐</text>
+    <text class="empty-sub">换个日期试试，或者先去点餐吧</text>
+  </view>
+
+  <!-- 加载中 -->
+  <view class="flex-center mt-30" wx:if="{{loading}}">
+    <text class="text-hint">加载中...</text>
+  </view>
+
+  <!-- 底部操作栏 -->
+  <view class="bottom-bar" wx:if="{{list.length > 0}}">
+    <view class="flex-between">
+      <text class="text-sm">
+        已勾 {{checkedCount}} / {{list.length}} 项
+      </text>
+      <button class="btn btn-primary" bindtap="copyList">📋 复制清单</button>
+    </view>
+  </view>
+</view>

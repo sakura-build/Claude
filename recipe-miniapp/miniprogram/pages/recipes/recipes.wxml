@@ -1,0 +1,56 @@
+<!-- 菜谱列表页 -->
+<view class="page-container">
+  <!-- 搜索栏 -->
+  <view class="search-bar">
+    <text class="search-icon">🔍</text>
+    <input
+      placeholder="搜索菜谱..."
+      value="{{searchKeyword}}"
+      bindinput="onSearchInput"
+      bindconfirm="onSearchConfirm"
+      confirm-type="search"
+    />
+  </view>
+
+  <!-- 分类筛选 -->
+  <scroll-view scroll-x class="category-tabs">
+    <view
+      class="category-tab {{activeCategory === item ? 'active' : ''}}"
+      wx:for="{{categories}}"
+      wx:key="*this"
+      wx:for-item="item"
+      data-category="{{item}}"
+      bindtap="onCategoryChange"
+    >{{item}}</view>
+  </scroll-view>
+
+  <!-- 菜谱列表 -->
+  <view class="recipe-list" wx:if="{{recipes.length > 0}}">
+    <recipe-card
+      wx:for="{{recipes}}"
+      wx:key="_id"
+      recipe="{{item}}"
+      bindtap="onRecipeTap"
+    />
+  </view>
+
+  <!-- 加载状态 -->
+  <view class="flex-center mt-30" wx:if="{{loading}}">
+    <text class="text-hint">加载中...</text>
+  </view>
+
+  <!-- 没有更多 -->
+  <view class="flex-center mt-30 mb-20" wx:if="{{!hasMore && recipes.length > 0}}">
+    <text class="text-hint text-sm">— 已经到底了 —</text>
+  </view>
+
+  <!-- 空状态 -->
+  <view class="empty-state" wx:if="{{!loading && recipes.length === 0}}">
+    <text class="empty-icon">📖</text>
+    <text class="empty-text">还没有菜谱</text>
+    <text class="empty-sub">点击右下角 + 添加第一道菜吧</text>
+  </view>
+
+  <!-- 浮动按钮 -->
+  <view class="fab" bindtap="onAddRecipe">+</view>
+</view>

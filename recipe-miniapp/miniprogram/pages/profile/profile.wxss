@@ -1,0 +1,141 @@
+/* 个人中心样式 */
+.page-container {
+  padding-bottom: 40rpx;
+}
+
+.profile-header {
+  display: flex;
+  align-items: center;
+  padding: 40rpx 30rpx;
+  background: linear-gradient(135deg, var(--primary), var(--primary-light));
+  color: #fff;
+}
+
+.avatar {
+  font-size: 72rpx;
+  width: 100rpx;
+  height: 100rpx;
+  line-height: 100rpx;
+  text-align: center;
+  background: rgba(255,255,255,0.2);
+  border-radius: 50%;
+  margin-right: 24rpx;
+}
+
+.user-info {
+  flex: 1;
+}
+
+.nickname-row {
+  display: flex;
+  align-items: center;
+}
+
+.nickname {
+  font-size: 36rpx;
+  font-weight: bold;
+}
+
+.edit-icon {
+  font-size: 28rpx;
+  margin-left: 12rpx;
+  opacity: 0.8;
+}
+
+.user-desc {
+  color: rgba(255,255,255,0.8);
+  margin-top: 4rpx;
+}
+
+/* 统计 */
+.stats-row {
+  display: flex;
+  align-items: center;
+  margin: -20rpx 20rpx 20rpx;
+  position: relative;
+  z-index: 1;
+}
+
+.stat-item {
+  flex: 1;
+  text-align: center;
+}
+
+.stat-num {
+  display: block;
+  font-size: 40rpx;
+  font-weight: bold;
+  color: var(--primary);
+}
+
+.stat-label {
+  font-size: 24rpx;
+  color: var(--text-hint);
+}
+
+.stat-divider {
+  width: 1rpx;
+  height: 60rpx;
+  background: var(--border-color);
+}
+
+/* 菜单 */
+.menu-group {
+  margin: 0 20rpx 16rpx;
+}
+
+.menu-item {
+  padding: 28rpx 0;
+  font-size: 30rpx;
+}
+
+.menu-item + .menu-item {
+  border-top: 1rpx solid var(--border-color);
+}
+
+.menu-item .arrow {
+  font-size: 36rpx;
+  color: var(--text-hint);
+}
+
+/* 编辑昵称弹窗 */
+.modal-mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  width: 80%;
+  background: #fff;
+  border-radius: var(--radius);
+  padding: 40rpx;
+}
+
+.modal-title {
+  display: block;
+  text-align: center;
+  font-size: 32rpx;
+  font-weight: bold;
+  margin-bottom: 30rpx;
+}
+
+.modal-input {
+  border: 1rpx solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 16rpx 20rpx;
+  font-size: 28rpx;
+  margin-bottom: 30rpx;
+}
+
+.modal-btns button {
+  width: 45%;
+  font-size: 28rpx;
+}

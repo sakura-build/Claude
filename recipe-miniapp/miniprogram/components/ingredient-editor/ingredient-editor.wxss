@@ -1,0 +1,70 @@
+/* 食材编辑组件 */
+.ing-editor {
+  background: var(--bg-white);
+  border-radius: var(--radius);
+  margin: 0 20rpx;
+  padding: 20rpx;
+  box-shadow: var(--shadow);
+}
+
+.ing-row {
+  display: flex;
+  align-items: center;
+  padding: 12rpx 0;
+  gap: 10rpx;
+}
+
+.ing-row + .ing-row {
+  border-top: 1rpx solid var(--border-color);
+}
+
+.ing-field {
+  border-bottom: 1rpx solid var(--border-color);
+}
+
+.name-field { flex: 2; }
+.qty-field { flex: 1; }
+.unit-field { flex: 1.2; }
+
+.field-input {
+  width: 100%;
+  padding: 10rpx 0;
+  font-size: 26rpx;
+}
+
+.picker-display {
+  padding: 10rpx 0;
+  font-size: 26rpx;
+  color: var(--text-secondary);
+}
+
+.ing-del {
+  width: 44rpx;
+  height: 44rpx;
+  line-height: 44rpx;
+  text-align: center;
+  font-size: 24rpx;
+  color: var(--danger);
+  flex-shrink: 0;
+}
+
+/* 添加按钮 */
+.ing-add {
+  padding: 20rpx 0 10rpx;
+  color: var(--primary);
+}
+
+.add-icon {
+  width: 40rpx;
+  height: 40rpx;
+  line-height: 38rpx;
+  text-align: center;
+  border: 2rpx dashed var(--primary);
+  border-radius: 50%;
+  font-size: 32rpx;
+  margin-right: 10rpx;
+}
+
+.add-text {
+  font-size: 26rpx;
+}

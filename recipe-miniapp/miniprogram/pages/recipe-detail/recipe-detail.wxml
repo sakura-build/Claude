@@ -1,0 +1,103 @@
+<!-- 菜谱详情页 -->
+<view class="page-container" wx:if="{{recipe}}">
+  <!-- 封面 -->
+  <image
+    class="cover-image"
+    src="{{recipe.coverImage}}"
+    mode="aspectFill"
+    wx:if="{{recipe.coverImage}}"
+  />
+
+  <!-- 基本信息 -->
+  <view class="recipe-header card">
+    <text class="recipe-name">{{recipe.name}}</text>
+    <view class="recipe-meta flex-row text-sm text-hint mt-10">
+      <text class="tag tag-primary">{{recipe.category}}</text>
+      <text class="meta-item">⏱ {{recipe.cookingTime}}分钟</text>
+      <text class="meta-item">{{difficultyLabel}}</text>
+      <text class="meta-item">🍽 {{recipe.servings}}人份</text>
+    </view>
+    <view class="tags-row flex-row flex-wrap mt-10" wx:if="{{recipe.tags && recipe.tags.length}}">
+      <text class="tag tag-warning" wx:for="{{recipe.tags}}" wx:key="*this">{{item}}</text>
+    </view>
+    <text class="recipe-desc text-secondary mt-10" wx:if="{{recipe.description}}">{{recipe.description}}</text>
+  </view>
+
+  <!-- 食材 / 步骤 Tabs -->
+  <view class="detail-tabs flex-row card">
+    <view
+      class="tab-item {{showIngredients ? 'active' : ''}}"
+      data-tab="ingredients"
+      bindtap="switchTab"
+    >🥬 食材</view>
+    <view
+      class="tab-item {{showSteps ? 'active' : ''}}"
+      data-tab="steps"
+      bindtap="switchTab"
+    >👨‍🍳 步骤</view>
+  </view>
+
+  <!-- 食材清单 -->
+  <view class="card" wx:if="{{showIngredients}}">
+    <view class="ingredient-item flex-between"
+      wx:for="{{recipe.ingredients}}"
+      wx:key="name"
+    >
+      <text class="ing-name">{{item.name}}</text>
+      <text class="ing-amount text-hint">{{item.quantity}} {{item.unit}}</text>
+    </view>
+    <view class="empty-state" wx:if="{{!recipe.ingredients || recipe.ingredients.length === 0}}">
+      <text class="empty-text">暂无食材信息</text>
+    </view>
+  </view>
+
+  <!-- 烹饪步骤 -->
+  <view class="card" wx:if="{{showSteps}}">
+    <!-- 步骤列表视图 -->
+    <view class="step-list">
+      <view class="step-item {{currentStep === index ? 'active' : ''}}"
+        wx:for="{{recipe.steps}}"
+        wx:key="stepNum"
+        wx:for-index="index"
+        data-index="{{index}}"
+        bindtap="viewStep"
+      >
+        <view class="step-num {{currentStep === index ? 'active' : ''}}">
+          <text wx:if="{{currentStep !== index}}">{{item.stepNum}}</text>
+          <text wx:else>✓</text>
+        </view>
+        <view class="step-content flex-1">
+          <text class="step-desc">{{item.description}}</text>
+          <view class="step-meta flex-row text-sm text-hint" wx:if="{{item.timer}}">
+            <text>⏲ 约{{item.timer}}分钟</text>
+          </view>
+        </view>
+        <image
+          wx:if="{{item.image}}"
+          class="step-img"
+          src="{{item.image}}"
+          mode="aspectFill"
+        />
+      </view>
+    </view>
+    <view class="empty-state" wx:if="{{!recipe.steps || recipe.steps.length === 0}}">
+      <text class="empty-text">暂无步骤信息</text>
+    </view>
+  </view>
+
+  <!-- 底部操作栏 -->
+  <view class="bottom-bar flex-between">
+    <button class="btn btn-outline" bindtap="onEditRecipe">✏️ 编辑</button>
+    <button class="btn btn-primary flex-1 ml-20" bindtap="onOrderThis">📝 点这道菜</button>
+  </view>
+
+  <!-- 删除按钮 -->
+  <view class="flex-center mt-30 mb-30">
+    <text class="delete-btn text-sm" bindtap="onDeleteRecipe">删除菜谱</text>
+  </view>
+</view>
+
+<!-- 加载中 -->
+<view class="empty-state" wx:if="{{!recipe}}">
+  <text class="empty-text">加载中...</text>
+</view>

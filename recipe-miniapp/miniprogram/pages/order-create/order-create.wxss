@@ -1,0 +1,55 @@
+/* 点餐创建页样式 */
+.page-container { padding-bottom: 60rpx; }
+
+.form-section { margin: 20rpx; }
+
+.form-item { padding: 20rpx 0; }
+.form-item + .form-item { border-top: 1rpx solid var(--border-color); }
+
+.form-label { display: block; font-size: 28rpx; font-weight: bold; margin-bottom: 12rpx; }
+.form-label.required::after { content: ' *'; color: var(--danger); }
+
+.form-input { width: 100%; padding: 14rpx 0; font-size: 28rpx; border-bottom: 2rpx solid var(--border-color); }
+.form-textarea { width: 100%; min-height: 80rpx; padding: 14rpx 0; font-size: 28rpx; }
+
+/* 菜谱选择 */
+.recipe-select { padding: 14rpx 0; }
+.selected-cover { width: 80rpx; height: 80rpx; border-radius: var(--radius-sm); margin-right: 16rpx; background: var(--bg-primary); }
+.selected-name { font-size: 28rpx; font-weight: bold; }
+
+/* 菜谱选择弹层 */
+.recipe-picker-mask {
+  position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.5); z-index: 1000;
+  display: flex; align-items: flex-end;
+}
+.recipe-picker {
+  width: 100%; max-height: 70vh; background: #fff;
+  border-radius: var(--radius) var(--radius) 0 0; padding: 20rpx 0;
+}
+.picker-header { padding: 16rpx 30rpx; }
+.picker-title { font-size: 32rpx; font-weight: bold; }
+.picker-close { font-size: 36rpx; color: var(--text-hint); padding: 10rpx; }
+.picker-list { max-height: 50vh; }
+.picker-item { padding: 20rpx 30rpx; }
+.picker-item.active { background: #FFF5F0; }
+.picker-item + .picker-item { border-top: 1rpx solid var(--border-color); }
+.picker-cover { width: 60rpx; height: 60rpx; border-radius: var(--radius-sm); margin-right: 16rpx; background: var(--bg-primary); }
+
+/* 餐别 */
+.meal-option {
+  padding: 12rpx 28rpx; border-radius: 30rpx; margin-right: 16rpx;
+  font-size: 26rpx; background: var(--bg-primary); transition: all 0.2s;
+}
+.meal-option.active { background: var(--primary); color: #fff; }
+
+/* 步进 */
+.stepper-btn {
+  width: 56rpx; height: 56rpx; line-height: 56rpx; text-align: center;
+  background: var(--bg-primary); border-radius: 50%;
+  font-size: 32rpx; font-weight: bold;
+}
+.stepper-value { font-size: 32rpx; font-weight: bold; margin: 0 30rpx; min-width: 40rpx; text-align: center; }
+
+/* 底部 */
+.save-area { padding: 30rpx 20rpx; }

@@ -1,0 +1,104 @@
+<!-- 订单列表页 -->
+<view class="page-container">
+  <!-- 日期筛选栏 -->
+  <view class="date-filter flex-between">
+    <view class="flex-row">
+      <picker mode="date" value="{{filterDate}}" bindchange="onDateChange">
+        <view class="date-picker-btn">
+          <text>{{filterDate || '筛选日期'}}</text>
+          <text class="arrow">▼</text>
+        </view>
+      </picker>
+      <text class="clear-date" wx:if="{{filterDate}}" bindtap="clearDateFilter">✕</text>
+    </view>
+  </view>
+
+  <!-- 状态筛选 -->
+  <scroll-view scroll-x class="status-tabs">
+    <view
+      class="status-tab {{activeFilter === 'all' ? 'active' : ''}}"
+      data-filter="all"
+      bindtap="onFilterChange"
+    >全部</view>
+    <view
+      class="status-tab {{activeFilter === 'pending' ? 'active' : ''}}"
+      data-filter="pending"
+      bindtap="onFilterChange"
+    >待确认</view>
+    <view
+      class="status-tab {{activeFilter === 'confirmed' ? 'active' : ''}}"
+      data-filter="confirmed"
+      bindtap="onFilterChange"
+    >已接单</view>
+    <view
+      class="status-tab {{activeFilter === 'cooking' ? 'active' : ''}}"
+      data-filter="cooking"
+      bindtap="onFilterChange"
+    >制作中</view>
+    <view
+      class="status-tab {{activeFilter === 'completed' ? 'active' : ''}}"
+      data-filter="completed"
+      bindtap="onFilterChange"
+    >已完成</view>
+  </scroll-view>
+
+  <!-- 订单列表 -->
+  <block wx:if="{{orders.length > 0}}">
+    <view class="order-card card"
+      wx:for="{{orders}}"
+      wx:key="_id"
+    >
+      <view class="order-main flex-between" bindtap="onRecipeTap" data-recipe-id="{{item.recipeId}}">
+        <view class="flex-row flex-1">
+          <image
+            class="order-cover"
+            src="{{item.recipeCover}}"
+            mode="aspectFill"
+          />
+          <view class="flex-1">
+            <view class="flex-row">
+              <text class="order-name">{{item.recipeName}}</text>
+              <text class="order-qty">x{{item.quantity}}</text>
+            </view>
+            <view class="order-info text-sm text-secondary">
+              <text>{{item.requestedBy}}</text>
+              <text> · {{item.requestedDate}}</text>
+              <text> · {{mealLabels[item.mealType]}}</text>
+            </view>
+            <view class="order-note text-sm text-hint" wx:if="{{item.note}}">备注：{{item.note}}</view>
+          </view>
+        </view>
+        <view class="order-status-badge" style="background:{{statusColors[item.status]}}20; color:{{statusColors[item.status]}}">
+          {{statusLabels[item.status]}}
+        </view>
+      </view>
+
+      <!-- 操作按钮 -->
+      <view class="order-actions" wx:if="{{item.status !== 'completed' && item.status !== 'cancelled'}}">
+        <button
+          class="btn btn-outline btn-sm"
+          data-id="{{item._id}}"
+          bindtap="onOrderAction"
+        >更新状态</button>
+      </view>
+    </view>
+
+    <!-- 加载更多 -->
+    <view class="flex-center mt-20 mb-20" wx:if="{{loading}}">
+      <text class="text-hint">加载中...</text>
+    </view>
+    <view class="flex-center mt-20 mb-20" wx:if="{{!hasMore && orders.length > 0}}">
+      <text class="text-hint text-sm">— 已经到底了 —</text>
+    </view>
+  </block>
+
+  <!-- 空状态 -->
+  <view class="empty-state" wx:if="{{!loading && orders.length === 0}}">
+    <text class="empty-icon">📝</text>
+    <text class="empty-text">还没有点餐记录</text>
+    <text class="empty-sub">点击右下角 + 来点餐吧</text>
+  </view>
+
+  <!-- 浮动按钮 -->
+  <view class="fab" bindtap="onAddOrder">+</view>
+</view>

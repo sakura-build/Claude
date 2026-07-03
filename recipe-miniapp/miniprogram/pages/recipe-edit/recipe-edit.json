@@ -1,0 +1,7 @@
+{
+  "usingComponents": {
+    "ingredient-editor": "/components/ingredient-editor/ingredient-editor",
+    "step-editor": "/components/step-editor/step-editor"
+  },
+  "navigationBarTitleText": "编辑菜谱"
+}

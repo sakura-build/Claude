@@ -1,0 +1,150 @@
+/* 菜谱详情样式 */
+.page-container {
+  padding-bottom: 140rpx;
+}
+
+.cover-image {
+  width: 100%;
+  height: 400rpx;
+  background: var(--bg-primary);
+}
+
+.recipe-header {
+  margin: -30rpx 20rpx 0;
+  position: relative;
+  z-index: 1;
+}
+
+.recipe-name {
+  font-size: 40rpx;
+  font-weight: bold;
+}
+
+.recipe-desc {
+  line-height: 1.6;
+}
+
+.meta-item {
+  margin-left: 20rpx;
+}
+
+/* 标签页 */
+.detail-tabs {
+  display: flex;
+  padding: 0;
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.tab-item {
+  flex: 1;
+  text-align: center;
+  padding: 24rpx 0;
+  font-size: 30rpx;
+  border-bottom: 4rpx solid transparent;
+  transition: all 0.2s;
+}
+
+.tab-item.active {
+  border-bottom-color: var(--primary);
+  color: var(--primary);
+  font-weight: bold;
+}
+
+/* 食材列表 */
+.ingredient-item {
+  padding: 20rpx 0;
+}
+
+.ingredient-item + .ingredient-item {
+  border-top: 1rpx solid var(--border-color);
+}
+
+.ing-name {
+  font-size: 28rpx;
+}
+
+.ing-amount {
+  font-size: 26rpx;
+}
+
+/* 步骤列表 */
+.step-item {
+  display: flex;
+  align-items: flex-start;
+  padding: 24rpx 0;
+  transition: background 0.2s;
+  border-radius: var(--radius-sm);
+  padding-left: 12rpx;
+  padding-right: 12rpx;
+  margin-left: -12rpx;
+  margin-right: -12rpx;
+}
+
+.step-item.active {
+  background: #FFF5F0;
+}
+
+.step-item + .step-item {
+  border-top: 1rpx solid var(--border-color);
+}
+
+.step-num {
+  width: 50rpx;
+  height: 50rpx;
+  line-height: 50rpx;
+  text-align: center;
+  border-radius: 50%;
+  background: var(--bg-primary);
+  color: var(--text-secondary);
+  font-size: 24rpx;
+  font-weight: bold;
+  flex-shrink: 0;
+  margin-right: 16rpx;
+  margin-top: 4rpx;
+}
+
+.step-num.active {
+  background: var(--primary);
+  color: #fff;
+}
+
+.step-desc {
+  font-size: 28rpx;
+  line-height: 1.6;
+}
+
+.step-meta {
+  margin-top: 8rpx;
+}
+
+.step-img {
+  width: 100rpx;
+  height: 100rpx;
+  border-radius: var(--radius-sm);
+  margin-left: 12rpx;
+  flex-shrink: 0;
+  background: var(--bg-primary);
+}
+
+/* 底部栏 */
+.bottom-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #fff;
+  padding: 16rpx 20rpx;
+  box-shadow: 0 -2rpx 12rpx rgba(0,0,0,0.06);
+  z-index: 100;
+  padding-bottom: calc(16rpx + constant(safe-area-inset-bottom));
+  padding-bottom: calc(16rpx + env(safe-area-inset-bottom));
+}
+
+.ml-20 { margin-left: 20rpx; }
+
+/* 删除 */
+.delete-btn {
+  color: var(--danger);
+  padding: 10rpx 20rpx;
+}

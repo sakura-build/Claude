@@ -1,0 +1,119 @@
+<!-- 创建点餐订单 -->
+<view class="page-container">
+  <view class="form-section card">
+    <!-- 选择菜谱 -->
+    <view class="form-item">
+      <text class="form-label required">选择菜谱</text>
+      <view class="recipe-select flex-between" bindtap="toggleRecipePicker">
+        <view class="flex-row" wx:if="{{selectedRecipeId}}">
+          <image class="selected-cover" src="{{selectedRecipeCover}}" mode="aspectFill" />
+          <text class="selected-name">{{selectedRecipeName}}</text>
+        </view>
+        <text wx:else class="text-hint">点击选择菜谱</text>
+        <text class="arrow">›</text>
+      </view>
+    </view>
+
+    <!-- 菜谱选择弹层 -->
+    <view class="recipe-picker-mask" wx:if="{{showRecipePicker}}" catchtap="toggleRecipePicker">
+      <view class="recipe-picker" catchtap>
+        <view class="picker-header flex-between">
+          <text class="picker-title">选择菜谱</text>
+          <text class="picker-close" bindtap="toggleRecipePicker">✕</text>
+        </view>
+        <view class="search-bar">
+          <input placeholder="搜索..." value="{{searchKeyword}}" bindinput="onRecipeSearch" />
+        </view>
+        <scroll-view scroll-y class="picker-list">
+          <view class="picker-item flex-between {{selectedRecipeId === item._id ? 'active' : ''}}"
+            wx:for="{{recipes}}"
+            wx:key="_id"
+            wx:if="{{!searchKeyword || item.name.indexOf(searchKeyword) !== -1}}"
+            data-id="{{item._id}}"
+            data-name="{{item.name}}"
+            data-cover="{{item.coverImage}}"
+            bindtap="selectRecipe"
+          >
+            <view class="flex-row">
+              <image class="picker-cover" src="{{item.coverImage}}" mode="aspectFill" />
+              <text>{{item.name}}</text>
+            </view>
+            <text>{{item.category}}</text>
+          </view>
+        </scroll-view>
+      </view>
+    </view>
+
+    <!-- 餐别 -->
+    <view class="form-item">
+      <text class="form-label">餐别</text>
+      <view class="flex-row">
+        <view
+          class="meal-option {{mealType === item.value ? 'active' : ''}}"
+          wx:for="{{mealTypes}}"
+          wx:key="value"
+          wx:for-item="item"
+          data-value="{{item.value}}"
+          bindtap="onMealTypeChange"
+        >{{item.label}}</view>
+      </view>
+    </view>
+
+    <!-- 日期 -->
+    <view class="form-item">
+      <text class="form-label">日期</text>
+      <picker mode="date" value="{{mealDate}}" start="{{minDate}}" bindchange="onDateChange">
+        <view class="picker-value flex-between">
+          <text>{{mealDate}} {{dateLabel}}</text>
+          <text class="arrow">▼</text>
+        </view>
+      </picker>
+    </view>
+
+    <!-- 数量 -->
+    <view class="form-item">
+      <text class="form-label">份数</text>
+      <view class="flex-row">
+        <view class="stepper-btn" bindtap="decreaseQty">−</view>
+        <text class="stepper-value">{{quantity}}</text>
+        <view class="stepper-btn" bindtap="increaseQty">+</view>
+      </view>
+    </view>
+
+    <!-- 点餐人 -->
+    <view class="form-item">
+      <text class="form-label required">点餐人</text>
+      <input
+        class="form-input"
+        placeholder="你的名字（如：妈妈、小明）"
+        value="{{requestedBy}}"
+        data-field="requestedBy"
+        bindinput="onFieldChange"
+        maxlength="20"
+      />
+    </view>
+
+    <!-- 备注 -->
+    <view class="form-item">
+      <text class="form-label">备注</text>
+      <textarea
+        class="form-textarea"
+        placeholder="有什么特殊要求？（如：少放盐、不要辣椒）"
+        value="{{note}}"
+        data-field="note"
+        bindinput="onFieldChange"
+        maxlength="100"
+      />
+    </view>
+  </view>
+
+  <!-- 提交 -->
+  <view class="save-area">
+    <button
+      class="btn btn-primary btn-block"
+      bindtap="onSubmit"
+      disabled="{{submitting}}"
+      loading="{{submitting}}"
+    >{{submitting ? '提交中...' : '确认点餐'}}</button>
+  </view>
+</view>
